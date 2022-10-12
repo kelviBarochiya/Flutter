@@ -1,0 +1,71 @@
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+
+void main() {
+  runApp(App());
+}
+
+class App extends StatelessWidget {
+  const App({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      home: HomePage(),
+    );
+  }
+}
+
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  var myList = [
+    "c language",
+    "C++",
+    "JAVA",
+    "PYTHON",
+    "Andriod",
+    "IOS",
+    "Windows",
+    "Flutter",
+    "Mac"
+  ];
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            "KELVI",
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold),
+          ),
+          centerTitle: true,
+        ),
+        body: ListView.builder(
+            itemCount: myList.length,
+            itemBuilder: (context, index) {
+              return Card(
+                child: ListTile(
+                  leading: const CircleAvatar(
+                    backgroundImage: NetworkImage(
+                        'https://cdn-icons-png.flaticon.com/512/5968/5968764.png'),
+                  ),
+                  trailing: const Icon(Icons.keyboard_arrow_right_sharp),
+                  title: Text('Data : ${myList[index]}'),
+                  subtitle: Text('subtitle $index'),
+                  onTap: () {
+                    print(
+                        "clickes on index $index : value is ${myList[index]}");
+                  },
+                ),
+              );
+            }));
+  }
+}
