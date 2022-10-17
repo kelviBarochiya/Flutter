@@ -1,0 +1,143 @@
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+
+void main() {
+  runApp(App());
+}
+
+class App extends StatelessWidget {
+  const App({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      home: HomePage(),
+    );
+  }
+}
+
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  var myapp = " ";
+  var name = '';
+  TextEditingController mytxt1 = TextEditingController();
+  TextEditingController mytxt2 = TextEditingController();
+
+  get requestBody => null;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            "SUM",
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold),
+          ),
+          centerTitle: true,
+        ),
+        body: Column(
+          children: [
+            const Text(
+              "MY SUM APP",
+              style: TextStyle(fontSize: 20),
+            ),
+            TextField(
+              controller: mytxt1,
+            ),
+            TextField(
+              controller: mytxt2,
+            ),
+            ElevatedButton(
+                onPressed: () {
+                  myprocess();
+                },
+                child: Text("API")),
+            ElevatedButton(
+                onPressed: () {
+                  SaveData();
+                },
+                child: Text("Save")),
+            ElevatedButton(
+                onPressed: () {
+                  GetData();
+                },
+                child: Text("Get")),
+            ElevatedButton(
+                onPressed: () {
+                  RemoveData();
+                },
+                child: Text("remove")),
+            ElevatedButton(
+                onPressed: (() {
+                  showSnackBar("Flutter");
+                }),
+                child: const Text("SnackBar")),
+            Text(
+              "$myapp",
+              style: TextStyle(color: Colors.green, fontSize: 25),
+            ),
+          ],
+        ));
+  }
+
+  void myprocess() async {
+    print("ClickMe");
+
+    var a = mytxt1.text;
+    var b = mytxt2.text;
+    var url = Uri.parse('https://akashsir.in/myapi/crud/todo-add-api.php');
+    var requestBody = {'todo_title': "a", 'todo_details': "a"};
+    var response = await http.post(url, body: requestBody);
+    print('Response status : ${response.statusCode}');
+    print('Response body : ${response.body}');
+    setState(() {
+      myapp = "Record Added : " + response.body;
+    });
+  }
+
+  void showSnackBar(String message) {
+    var snackBar = SnackBar(
+      content: Text(message),
+      backgroundColor: Colors.orangeAccent,
+      width: 300,
+      behavior: SnackBarBehavior.floating,
+      duration: const Duration(seconds: 5),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  void SaveData() async {
+    var prefs = await SharedPreferences.getInstance();
+    name = mytxt1.text + mytxt2.text;
+    await prefs.setString('counter', name);
+    setState(() {
+      myapp = "Saved";
+    });
+  }
+
+  void GetData() async {
+    var prefs = await SharedPreferences.getInstance();
+    final counter = prefs.getString('counter');
+
+    setState(() {
+      myapp = "Get Data : $counter";
+    });
+  }
+
+  void RemoveData() async {
+    var prefs = await SharedPreferences.getInstance();
+    await prefs.remove('counter');
+
+    setState(() {
+      myapp = "Removed";
+    });
+  }
+}
