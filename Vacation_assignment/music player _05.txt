@@ -1,0 +1,125 @@
+import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Kelvi',
+      theme: ThemeData(),
+      home: const MyHomePage(title: 'Audio Player'),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key, required this.title});
+  final String title;
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  var audio = [
+    "rangisari.mp3",
+    "Tum_Saath_Ho.mp3",
+    "Dance_ka_Bhoot.mp3",
+    "Deva_Deva.mp3",
+    "Iktara.mp3",
+    "Jo_Tainu_Dhoop_Lagya_Ve.mp3",
+    "Kasam_Ki_Kasam_X_Pee_Loon.mp3",
+    "Kesariya.mp3",
+    "Raanjhana_Ve.mp3",
+    "Raatan_Lambiyan.mp3",
+    "Saibo_X_Jashne_Bahara_X_Iktara.mp3",
+    "Tera_Yaar_Hoon_Main.mp3",
+    "Tum_Agar_Manaoge_Toh_Maan_Jaunga.mp3",
+    "Tum_Mile.mp3",
+    "Tum_Se_Hi.mp3",
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: ListView.builder(
+        itemCount: audio.length,
+        itemBuilder: (context, index) {
+          return Card(
+            child: ListTile(
+              leading: const CircleAvatar(
+                backgroundImage: NetworkImage(
+                    'https://cdn-icons-png.flaticon.com/512/3293/3293810.png'),
+              ),
+              trailing: Icon(Icons.keyboard_arrow_right),
+              title: Text(audio[index]),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => secondscreen(music: audio[index]),
+                  ),
+                );
+              },
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class secondscreen extends StatelessWidget {
+  String? music;
+
+  secondscreen({this.music});
+  AudioPlayer audioPlayer = AudioPlayer();
+  var path = "music/";
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: Center(
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              ElevatedButton(
+                  onPressed: () async {
+                    await audioPlayer
+                        .play(AssetSource(path + music.toString()));
+                    print("Play");
+                  },
+                  child: Text('Play')),
+              ElevatedButton(
+                  onPressed: () async {
+                    await audioPlayer.pause();
+                    print("Pause");
+                  },
+                  child: Text('Pause')),
+              ElevatedButton(
+                  onPressed: () async {
+                    await audioPlayer.resume();
+                    print("Resume");
+                  },
+                  child: Text('Resume')),
+              ElevatedButton(
+                  onPressed: () async {
+                    await audioPlayer.stop();
+                    print("Stop");
+                  },
+                  child: Text('Stop')),
+            ]),
+      ),
+    );
+  }
+}

@@ -1,0 +1,136 @@
+import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/material.dart';
+import 'package:volume_control/volume_control.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Kelvi',
+      theme: ThemeData(),
+      home: const MyHomePage(title: 'Audio Player'),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key, required this.title});
+  final String title;
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  AudioPlayer audioPlayer = AudioPlayer();
+  String myAudioPath = "music/rangisari.mp3";
+
+  Duration _duration = Duration();
+  Duration _position = Duration();
+
+  String operation = "Play";
+  double currentVolume = 0.1;
+  @override
+  Widget build(BuildContext context) {
+    audioPlayer.onPositionChanged.listen((event) {
+      setState(() {
+        _position = event;
+      });
+    });
+
+    audioPlayer.onDurationChanged.listen((event) {
+      setState(() {
+        _duration = event;
+      });
+    });
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: Center(
+        child: Container(
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+              colors: [
+                Colors.blue,
+                Colors.red,
+              ],
+            )),
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                      height: 150.0,
+                      child: Image.asset(
+                        "assets/image/rangisari.jpg",
+                      )),
+                  SizedBox(
+                    //Use of SizedBox
+                    height: 50,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      ElevatedButton(
+                        child: Text("Play"),
+                        onPressed: () {},
+                      ),
+                      ElevatedButton(
+                        child: Text("pause"),
+                        onPressed: () {},
+                      ),
+                      ElevatedButton(
+                        child: Text("Resume"),
+                        onPressed: () {},
+                      ),
+                      ElevatedButton(
+                        child: Text("stop"),
+                        onPressed: () {},
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: 10.0,
+                      ),
+                      Text("Volume"),
+                      Expanded(
+                        child: Slider(
+                            value: currentVolume,
+                            max: 1.0,
+                            divisions: 10,
+                            onChanged: (value) {
+                              VolumeControl.setVolume(value);
+                              setState(() {
+                                currentVolume = value;
+                              });
+                            }),
+                      ),
+                    ],
+                  ),
+                  Slider.adaptive(
+                    onChanged: (double value) {
+                      setState(() {
+                        audioPlayer.seek(Duration(seconds: value.toInt()));
+                      });
+                    },
+                    min: 0.0,
+                    max: _duration.inSeconds.toDouble(),
+                    value: _position.inSeconds.toDouble(),
+                  ),
+                ])),
+      ),
+    );
+  }
+}
