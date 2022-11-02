@@ -1,0 +1,185 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      // Remove the debug banner
+      debugShowCheckedModeBanner: false,
+      title: 'Kelvi',
+      home: HomePage(),
+    );
+  }
+}
+
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
+
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  Color _bgColor = Colors.blue;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Color App'),
+      ),
+      body: Column(
+        children: [
+          Container(
+            width: 500,
+            height: 694,
+            color: _bgColor,
+            child: Center(
+                child: Wrap(
+              alignment: WrapAlignment.spaceBetween,
+              direction: Axis.horizontal,
+              children: [
+                // Green Acent
+                Container(
+                  child: MaterialButton(
+                    onPressed: () {
+                      setState(() {
+                        _bgColor = Colors.greenAccent;
+                      });
+                    },
+                    color: Colors.greenAccent,
+                  ),
+                ),
+
+                // Orange
+                Container(
+                  child: MaterialButton(
+                    onPressed: () {
+                      setState(() {
+                        _bgColor = Colors.orange;
+                      });
+                    },
+                    color: Colors.orange,
+                  ),
+                ),
+
+                // Yellow
+                Container(
+                  child: MaterialButton(
+                    onPressed: () {
+                      setState(() {
+                        _bgColor = Colors.yellow;
+                      });
+                    },
+                    color: Colors.yellow,
+                  ),
+                ),
+
+                // Black
+                Container(
+                  child: MaterialButton(
+                    onPressed: () {
+                      setState(() {
+                        _bgColor = Colors.cyan;
+                      });
+                    },
+                    color: Colors.cyan,
+                  ),
+                ),
+
+                Container(
+                  child: MaterialButton(
+                    onPressed: () {
+                      setState(() {
+                        _bgColor = Colors.pink;
+                      });
+                    },
+                    color: Colors.pink,
+                  ),
+                ),
+
+                Container(
+                  child: MaterialButton(
+                    onPressed: () {
+                      setState(() {
+                        _bgColor = Colors.purple;
+                      });
+                    },
+                    color: Colors.purple,
+                  ),
+                ),
+
+                Container(
+                  child: MaterialButton(
+                    onPressed: () {
+                      setState(() {
+                        _bgColor = Colors.green;
+                      });
+                    },
+                    color: Colors.green,
+                  ),
+                ),
+                Container(
+                  child: MaterialButton(
+                    onPressed: () {
+                      setState(() {
+                        _bgColor = Colors.red;
+                      });
+                    },
+                    color: Colors.red,
+                  ),
+                ),
+                Container(
+                  child: MaterialButton(
+                    onPressed: () {
+                      setState(() {
+                        _bgColor = Color.fromARGB(255, 98, 137, 186);
+                      });
+                    },
+                    color: Color.fromARGB(255, 98, 137, 186),
+                  ),
+                ),
+                Container(
+                  child: MaterialButton(
+                    onPressed: () {
+                      setState(() {
+                        _bgColor = Colors.grey;
+                      });
+                    },
+                    color: Colors.grey,
+                  ),
+                ),
+                Container(
+                  child: MaterialButton(
+                    onPressed: () {
+                      setState(() {
+                        _bgColor = Colors.amber;
+                      });
+                    },
+                    color: Colors.amber,
+                  ),
+                ),
+                Container(
+                  child: MaterialButton(
+                    onPressed: () {
+                      setState(() {
+                        _bgColor = Color.fromARGB(255, 170, 132, 207);
+                      });
+                    },
+                    color: Color.fromARGB(255, 170, 132, 207),
+                  ),
+                ),
+              ],
+            )),
+          ),
+        ],
+      ),
+    );
+  }
+}
