@@ -1,0 +1,91 @@
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Kelvi',
+      theme: ThemeData(
+        primarySwatch: Colors.purple,
+      ),
+      home: MyHomePage(),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  @override
+  List todo = [];
+  var _todoController = TextEditingController();
+
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text("ToDo App"),
+        ),
+        body: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Color(0xFFCE93D8), Color(0xFFE1BEE7)],
+              ),
+            ),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    SizedBox(
+                        width: 392,
+                        child: TextField(
+                          decoration: InputDecoration(
+                            labelText: "Write any things....",
+                          ),
+                          controller: _todoController,
+                        )),
+                  ],
+                ),
+                ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        todo.add(_todoController.text);
+                        _todoController.text = "";
+                      });
+                    },
+                    child: Text("Add")),
+                Expanded(
+                  child: ListView.builder(
+                      itemCount: todo.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Card(
+                          child: ListTile(
+                            title: Text(todo[index]),
+                            trailing: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    todo.removeAt(index);
+                                  });
+                                },
+                                child: Icon(
+                                  Icons.delete_forever_outlined,
+                                  color: Colors.red,
+                                )),
+                          ),
+                        );
+                      }),
+                )
+              ],
+            )));
+  }
+}
