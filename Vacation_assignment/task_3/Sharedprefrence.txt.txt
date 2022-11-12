@@ -1,0 +1,108 @@
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'kelvi',
+      theme: ThemeData(
+        primarySwatch: Colors.purple,
+      ),
+      home: MyHomePage(),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  @override
+  List<String> todo = [];
+  var _todoController = TextEditingController();
+
+  Widget build(BuildContext context) {
+    getData();
+    return Scaffold(
+        appBar: AppBar(
+          title: Text("ToDo App"),
+        ),
+        body: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Color(0xFFCE93D8), Color(0xFFE1BEE7)],
+              ),
+            ),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    SizedBox(
+                        width: 391,
+                        child: TextField(
+                          decoration: InputDecoration(
+                            labelText: "Write any things....",
+                          ),
+                          controller: _todoController,
+                        )),
+                  ],
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      todo.add(_todoController.text);
+                      _todoController.text = "";
+                      saveData(todo);
+                    });
+                  },
+                  child: Text("Add"),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                      itemCount: todo.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Card(
+                          child: ListTile(
+                            title: Text(todo[index]),
+                            trailing: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    todo.removeAt(index);
+                                    saveData(todo);
+                                  });
+                                },
+                                child: Icon(
+                                  Icons.delete_forever_outlined,
+                                  color: Colors.red,
+                                )),
+                          ),
+                        );
+                      }),
+                )
+              ],
+            )));
+  }
+
+  void saveData(List<String> todos) async {
+    var prefs = await SharedPreferences.getInstance();
+    prefs.setStringList("todo", todos);
+  }
+
+  void getData() async {
+    var prefs = await SharedPreferences.getInstance();
+    if (prefs.containsKey("todo")) {
+      setState(() {
+        todo = prefs.getStringList("todo")!;
+      });
+    }
+  }
+}
